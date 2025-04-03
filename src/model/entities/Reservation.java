@@ -1,11 +1,11 @@
 package model.entities;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class Reservation {
+
     private Integer roomNumber;
     private Date checkin;
     private Date checkout;
@@ -26,11 +26,11 @@ public class Reservation {
         this.roomNumber = roomNumber;
     }
 
-    public Date getCheckin() {
+    public Date getCheckIn() {
         return checkin;
     }
 
-    public Date getCheckout() {
+    public Date getCheckOut() {
         return checkout;
     }
 
@@ -39,9 +39,18 @@ public class Reservation {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    public void updateDates(Date checkin, Date checkout) {
+    public String updateDates(Date checkin, Date checkout) {
+        Date now = new Date();
+
+        if (checkin.before(now) || checkout.before(now)) {
+            return "Reservation dates for update must be future dates";
+        }
+        if (!checkout.after(checkin)) {
+            return "Check-out date must be after check-in date";
+        }
         this.checkin = checkin;
         this.checkout = checkout;
+        return null;
     }
 
     @Override
